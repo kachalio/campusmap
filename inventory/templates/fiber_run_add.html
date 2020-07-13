@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block head %}
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'closet_details' closet_id %}"><< Back to Closet</a></p>
+<p id="latitude">{{closet_gps.latitude}}</p>
+<p id="longitude">{{closet_gps.longitude}}</p>
+<form action="{% url 'add_fiber_run' closet_id %}" method="post">
+    {% csrf_token %}
+    {{ form | crispy }}
+    <input type="submit" value="Submit" />
+</form>
+
+<p><strong>Instructions: </strong>Browser will pull your location upon initialization.  Click on the map to update the location of the closet.</p>
+<input type="button" id="get_location" class="btn" value="Get My Location" />
+<div id="map"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+var map, infoWindow, markers = [];
+var closet_lat = parseFloat(document.getElementById('latitude').innerHTML);
+var closet_lng = parseFloat(document.getElementById('longitude').innerHTML);
+
+console.log(closet_lat);
+  function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+      // center: {lat: -34.397, lng: 150.644},
+      center: { lat: closet_lat, lng: closet_lng },
+      zoom: 18
+    });
+    infoWindow = new google.maps.InfoWindow;
+
+    var pos = {
+      lat: closet_lat,
+      lng: closet_lng
+    };
+
+    map.setCenter(pos);
+    
+
+    google.maps.event.addListener(map, 'click', function(event) {
+    	
+		placeMarker(event.latLng);
+		updateLocationInput(event.latLng);
+	});
+
+
+  }
+
+  	function placeMarker(location) {
+	    removeMarkers();
+	    var marker = new google.maps.Marker({
+	        position: location, 
+	        map: map
+	    });
+	    markers.push(marker)
+	}
+
+	function removeMarkers() {
+		for(i=0; i<markers.length; i++){
+        	markers[i].setMap(null);
+    	}
+	}
+
+	function updateLocationInput(pos){
+		$("#id_latitude").val(pos.lat);
+        $("#id_longitude").val(pos.lng);
+	}
+
+  function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(browserHasGeolocation ?
+                          'Error: The Geolocation service failed.' :
+                          'Error: Your browser doesn\'t support geolocation.');
+    infoWindow.open(map);
+
+  }
+
+  //Click listener for "get my location" button
+  $("#get_location").click(function(){
+
+	if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+
+        updateLocationInput(pos);
+        placeMarker(pos);
+
+        map.setCenter(pos);
+      }, function() {
+        handleLocationError(true, infoWindow, map.getCenter());
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infoWindow, map.getCenter());
+    }
+
+  });
+
+</script>
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmGWMKFjKM0JHzFK3iu7TAp2k9v-Jkzo4&callback=initMap">
+</script>
+{% endblock %}

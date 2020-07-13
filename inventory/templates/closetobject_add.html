@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h1>Create new closet object</h1>
+    </div>
+    <div class="col">
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
+</div>
+
+{% endblock %}

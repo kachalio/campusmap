@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block head %}
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<meta charset="utf-8">
+<title>Simple markers</title>
+<style>
+  /* Always set the map height explicitly to define the size of the div
+   * element that contains the map. */
+  #map {
+    height: 100%;
+    /*width: 100px;*/
+  }
+  /* Optional: Makes the sample page fill the window. */
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+</style>
+</head>
+{% endblock %}
+{% block content %}
+
+{% for site in sites %}
+<button class ="btn" value="{{site.streetAddress}}">
+	{{site.name}}
+</button>
+{% endfor %}
+
+
+<div id="map"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+	var map, geocoder;
+  function initMap() {
+    var myLatLng = {lat: -25.363, lng: 131.044};
+
+    map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 4,
+      center: myLatLng
+    });
+
+    var marker = new google.maps.Marker({
+      position: myLatLng,
+      map: map,
+      title: 'Hello World!'
+    });
+  }
+
+  function codeAddress(address) {
+    geocoder = new google.maps.Geocoder();
+    geocoder.geocode({
+        'address': address
+	    }, function(results, status) {
+	        if (status == google.maps.GeocoderStatus.OK) {
+	            var myOptions = {
+	                zoom: 17,
+	                center: results[0].geometry.location,
+	                mapTypeId: google.maps.MapTypeId.ROADMAP
+	            }
+	            map = new google.maps.Map(document.getElementById("map"), myOptions);
+
+	            var marker = new google.maps.Marker({
+	                map: map,
+	                position: results[0].geometry.location
+	            });
+	        }
+	    });
+	}
+
+    $("button.btn").click(function(){
+    	console.log($(this).val());
+    	codeAddress($(this).val());
+    });
+
+
+</script>
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmGWMKFjKM0JHzFK3iu7TAp2k9v-Jkzo4&callback=initMap">
+</script>
+{% endblock %}
+

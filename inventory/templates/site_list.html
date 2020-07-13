@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+
+{% endblock head %}
+{% block content %}
+<p><a class="btn btn-primary" href="{% url 'add_site' %}">Add Site</a><button class="btn btn-primary" id="reset_zoom">Reset Map Zoom</button></p>
+<div class="row">
+	<div class="col-6 table-responsive">
+		<table class="display table" id="site-list-table">
+			<thead>
+				<tr>
+					
+					<th scope="col">Site Name</th>
+					<th scope="col">Street Address</th>
+					<th scope="col">Description</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for site in site_list %}
+				<tr>
+					<th scope="row"><a href="{% url 'site_details' site.id %}">{{site.name}}</a></th>
+					<td>{{site.streetAddress}}</td>
+					<td>{{site.description}}</td>
+					<td><a href="{% url 'site_details' site.id %}">Details</a> | <a href="{% url 'site_edit' site.id %}">Edit</a></td>
+					<td><button class="btn btn-primary btn-zoom" value="{{site.streetAddress}}">Zoom</button></td>
+				</tr>	
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="col-6">
+		<div id="map"></div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript" src="{% static 'js/site_list_map.js' %}"></script>
+	<script>
+		$(document).ready(function(){
+			$('#site-list-table').dataTable();
+		});
+	</script>
+{% endblock %}

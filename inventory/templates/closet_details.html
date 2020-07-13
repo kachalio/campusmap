@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p><a href="{% url 'site_details' closet_details.site.id %}"><< Back to Site Details</a><span class="glyphicon glyphicon-plus"></span></p>
+
+<div>
+	<h1>{{closet_details}}</h1>
+	<p>{{closet_details.description}}</p>
+	<h2>Closet Objects</h2>
+	{% for closet_object in closet_details.closetobject_set.all%}
+		<p>{{closet_object.hostname}} | {{closet_object.closetObjectType.name}} | {{closet_object.model}}</p>
+	{% endfor %}
+
+	<a href="{% url 'add_closet_object' closet_details.id %}">add closet object</a>
+
+	<h2>Fiber Runs</h2>
+	<p><strong><a href="{% url 'add_fiber_run' closet_details.id %}">Add Fiber Run</a></strong></p>
+	{% for fiber_run in closet_details.fiber_run_start.all %}
+		<p>{{  fiber_run.name }} | {{ fiber_run.start_closet.name }} -> {{ fiber_run.end_closet.name }}</p>
+	{% endfor %}
+</div>
+
+
+
+{% endblock %}

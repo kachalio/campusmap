@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p><a href="{% url 'sites' %}">
+		<< Back to Site List</a><span class="glyphicon glyphicon-plus"></span></p>
+
+<div>
+	<h1>{{server_details}}</h1>
+	<p>{{server_details.description}}</p>
+	
+	
+</div>
+
+
+
+{% endblock %}

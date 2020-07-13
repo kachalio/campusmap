@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+<p><a href="{% url 'sites' %}"><< Back to Site List</a><span class="glyphicon glyphicon-plus"></span></p>
+
+
+<div class="row">
+	<p>Name</p>
+	<h1>{{site_details.name}}</h1>
+</div>
+<div class="row">
+	<p>Description</p>
+	<h2>{{site_details.description}}</h2>
+</div>
+<div class="row">
+	<p>Street Address</p>
+	<h2 id="siteAddress">{{site_details.streetAddress}}</h2>	
+</div>
+<div class="row">
+	<p>ID</p>
+	<h2 id="siteId">{{site_details.id}}</h2>	
+</div>
+<div class="row">
+	<p><a class="btn btn-primary" href="{% url 'site_edit' site_details.id %}">Edit</a></p>
+	<p><a class="btn btn-danger" href="{% url 'site_delete' site_details.id %}">Delete</a></p>
+</div>
+
+<div class="row">
+	<div class="col-4 table-responsive">
+		<h3>Closets</h3>
+		<table id="closet-list-table" class="display table">
+			<thead>
+				<tr>
+					<th scope="col">Closet Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for closet in site_details.closet_set.all|dictsort:"name" %}
+				<tr>
+					<th scope="row"><a href="{% url 'closet_details' closet.id %}">{{closet.name}}</a></th>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<p><a class="btn btn-primary" href="{% url 'add_closet' site_details.id %}">Add Closet</a></p>
+	</div>
+	<div class="col-8">
+		<div id="map"></div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-12">
+		<div class="col-8 table-responsive">
+			<h3>Servers</h3>
+			<table id="server-list-table" class="display table">
+				<thead>
+					<tr>
+						<th scope="col">Server Name</th>
+						<th scope="col">Server Description</th>
+						<th scope="col">IP Address</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for server in site_details.server_set.all %}
+					<tr>
+						<th scope="row"><a href="{% url 'server_details' server.id %}">{{server.name}}</a></th>
+						<td>{{server.description}}</td>
+						<td>{{server.internal_address}}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<p><a class="btn btn-primary" href="{% url 'add_server' site_details.id %}">Add Server</a></p>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+	<script type="text/javascript" src="{% static 'js/site_details_map.js' %}"></script>
+	<script>
+		$(document).ready(function(){
+			$('#closet-list-table').dataTable();
+			$('#server-list-table').dataTable();
+		});
+	</script>
+{% endblock %}
+

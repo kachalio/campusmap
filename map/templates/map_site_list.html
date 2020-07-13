@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <title>Simple markers</title>
+  <style>
+    /* Always set the map height explicitly to define the size of the div
+    * element that contains the map. */
+    #map {
+      height: 600px;
+      /*width: 100px;*/
+    }
+    /* Optional: Makes the sample page fill the window. */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+  </style>
+</head>
+{% endblock %}
+{% block content %}
+<div class="site-locator">
+  <div class="row site-search">
+      <input type="text">
+      <h3>Search for Site in Area</h3>
+      <button type="btn btn-primary" style="width: 100px;"></button>
+  </div>
+  <div class="row">
+    <div class="col-4 scrollable">
+      <ul>
+      {% for site in sites %}
+        <li>
+          <div class="card select-card" style="width: 18rem;" value="{{site.id}}" data-url="{% url 'get_site_data' %}">
+            <!-- <img class="card-img-top" src="https://cdn.arstechnica.net/wp-content/uploads/2017/04/getty.servers.jpg"alt="Card image cap">-->
+            <div class="card-body">
+              <h5 class="card-title">{{site.name}}</h5>
+              <p class="card-text">You have x closets here.</p>
+              <p class="card-text">{{site.streetAddress}}</p>
+              <button class="btn btn-primary" value="{{site.id}}">
+                {{site.name}}
+              </button>
+            </div>
+          </div>
+
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col-8 ">
+      <div id="map"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript" src="{% static 'js/site_list_map.js' %}"></script>
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvbZIDx2IZUxMHXN2BBC1z-12tpPsxPXs&callback=initMap">
+</script>
+{% endblock %}
+

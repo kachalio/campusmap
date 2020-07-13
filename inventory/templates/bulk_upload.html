@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<form>
+    <p>Upload Site List</p>
+</form>
+{% for closet in closet_list %}
+<div>
+    <h1><a href="{% url 'closet_details' closet.id %}">{{closet.name}}</a></h1>
+    <p>{{closet.name}}</p>
+</div>
+
+{% endfor %}
+{% endblock %}

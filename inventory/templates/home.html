@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>You did it!! :)</h1>
+<div class="row">
+    <div class="col">
+        <div class="card" style="width: 18rem;">
+        
+            <img class="card-img-top" src="https://i.pinimg.com/originals/0f/54/b8/0f54b8df326fa1520fb16800cde56883.jpg"
+                alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">Sites</h5>
+                <p class="card-text">You have {{sites_count}} sites.</p>
+                <a href="{% url 'sites' %}" class="btn btn-primary">Go to Site List</a>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="https://cdn.arstechnica.net/wp-content/uploads/2017/04/getty.servers.jpg"
+                alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">Servers</h5>
+                <p class="card-text">You have {{servers_count}} servers.</p>
+                <a href="{% url 'servers' %}" class="btn btn-primary">Go to Server List</a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="table-responsive">
+	<table id="server-list-table" class="display table">
+		<thead>
+			<tr>
+				<th scope="col">Server Name</th>
+				<th scope="col">IP Address</th>
+				<th scope="col">Description</th>
+				<th scope="col">Instance</th>
+				<th scope="col">Operating System</th>
+				<th scope="col">Status</th>
+				<th scope="col">Site</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for server in server_list %}
+			<tr>
+				<th scope="row"><a href="{% url 'server_details' server.id %}">{{server.name}}</a></th>
+				<td>{{server.internal_address}}</td>
+				<td>{{server.description}}</td>
+				<td>{{server.instance}}</td>
+				<td>{{server.operating_system}}</td>
+				<td>{{server.status}}</td>
+				<td>{{server.site}}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<p><a class="btn btn-primary" href="{% url 'add_server' %}">Add Server</a></p>
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+	<script>
+		$(document).ready(function(){
+			$('#server-list-table').dataTable();
+		});
+	</script>
+{% endblock scripts %}

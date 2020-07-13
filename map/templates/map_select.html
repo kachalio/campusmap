@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% for site in sites %}
+<p class="btn"><a href="{% url 'map_site' site.id %}">{{ site.name }}</a></p>
+{% endfor %}
+
+{% endblock %}
+
